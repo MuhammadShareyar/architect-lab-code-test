@@ -1,0 +1,19 @@
+{
+  "name": "shareyar/architect-lab-code-test",
+  "type": "project",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "App\\ArchitectLabCodeTest\\": "src/",
+      "Tests\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11.5",
+    "phpstan/phpstan": "^2.1"
+  },
+  "scripts": {
+    "phpstan": "phpstan analyse",
+    "phpunit": "phpunit tests --testdox"
+  }
+}
