@@ -9,8 +9,8 @@ class Basket implements BasketInterface
 {
     /**
      * @param array<string, float> $catelogue
-     * @param array
-     * @param array
+     * @param array<DeliveryService> $deliveryRules
+     * @param array<OffersService> $offers
      * @param array<string, int> $basketItems
      */
     public function __construct(
@@ -39,6 +39,16 @@ class Basket implements BasketInterface
 
         foreach ($this->basketItems as $pcode => $qty) {
             $subtotal += $this->catelogue[$pcode] * $qty;
+        }
+
+        // apply offerss
+        foreach ($this->offers as $offer) {
+            $subtotal = $offer->apply($this->basketItems, $this->catelogue, $subtotal);
+        }
+
+        // apply delivery dscount
+        foreach ($this->deliveryRules as $rule) {
+            $subtotal += $rule->apply($subtotal);
         }
 
         return round($subtotal, 2);

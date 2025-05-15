@@ -10,6 +10,8 @@ $catelogueItems = ['R01' => 32.95, 'B01' => 7.95, 'G01' => 24.95];
 
 $basket = new Basket(
     $catelogueItems,
+    [new DeliveryService()],
+    [new OffersService('R01', 2)]
 );
 
 $basket->add('R01');
