@@ -81,5 +81,40 @@ class BasketTest extends TestCase
         $this->assertEquals(45.85, $basket->total());
     }
 
+    public function testBasketWithOffersAndDelivery(): void
+    {
+        $catelogue = ['R01' => 32.95,'B01' => 7.95, 'G01' => 24.95,
+        ];
+
+        $offers = [
+            new OffersService('R01', 3), // 50% discount on the second "R01"
+        ];
+
+        $deliveryRules = [
+            new class {
+                public function apply(float $subtotal): float
+                {
+                    // Free delivry for order >= 90
+                    return $subtotal >= 90 ? 0 : 4.95;
+                }
+            },
+        ];
+
+        $basket = new Basket($catelogue, $deliveryRules, $offers);
+
+        // Add items to the basket
+        $basket->add('R01');
+        $basket->add('R01');
+        $basket->add('R01');
+        $basket->add('B01');
+
+        // Total before delivery: 90.33
+        // Delivery fee: 0 (free delivery for orders >= 90)
+        // Final total: 90.33 (rounded to 2 decimal places)
+
+        $this->assertEquals(90.33, $basket->total());
+        $this->assertEquals(['R01' => 3, 'B01' => 1], $basket->items());
+    }
+
     
 }
